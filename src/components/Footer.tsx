@@ -1,4 +1,5 @@
 import Logo from "./Logo";
+import { PORTAL_LOGIN_URL } from "../lib/constants";
 
 export default function Footer() {
   return (
@@ -6,16 +7,14 @@ export default function Footer() {
       <footer>
         <div className="footer-row">
           <div className="footer-brand">
-            <div className="brand-icon" style={{ width: 30, height: 30, borderRadius: 8 }}>
-              <Logo size={16} />
-            </div>
+            <Logo size={22} />
             <span className="name">VAULT1</span>
           </div>
           <div className="footer-links">
             <a href="#solution">How it works</a>
             <a href="#experiences">Platform</a>
             <a href="#calculator">Calculator</a>
-            <a href="/login">Portal Login</a>
+            <a href={PORTAL_LOGIN_URL}>Portal Login</a>
           </div>
         </div>
         <div className="footer-disclaimer">

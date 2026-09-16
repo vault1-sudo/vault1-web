@@ -1,10 +1,35 @@
-const TERM_ROWS = [
-  { name: "S&P 500", val: "6,481.2", chg: "+0.61%", up: true },
-  { name: "Bitcoin", val: "$68,240", chg: "+2.41%", up: true },
-  { name: "EUR/USD", val: "1.0862", chg: "-0.22%", up: false },
+import { useMarketData } from "../hooks/useMarketData";
+import { PORTAL_LOGIN_URL } from "../lib/constants";
+
+const FALLBACK_ROWS = [
+  { name: "S&P 500", symbol: "S&P 500", val: "6,481.2", chg: "+0.61%", up: true },
+  { name: "Bitcoin", symbol: "BTC/USD", val: "$68,240", chg: "+2.41%", up: true },
+  { name: "EUR/USD", symbol: "EUR/USD", val: "1.0862", chg: "-0.22%", up: false },
 ];
 
+function formatPrice(symbol: string, price: number) {
+  if (symbol === "BTC/USD") return "$" + Math.round(price).toLocaleString("en-US");
+  if (symbol === "EUR/USD" || symbol === "GBP/USD") return price.toFixed(4);
+  return price.toLocaleString("en-US", { maximumFractionDigits: 1 });
+}
+
 export default function Hero() {
+  const quotes = useMarketData();
+  const hasLiveData = Object.keys(quotes).length > 0;
+
+  const rows = FALLBACK_ROWS.map((fallback) => {
+    const live = quotes[fallback.symbol];
+    if (!live) return fallback;
+    const up = live.changePct >= 0;
+    return {
+      name: fallback.name,
+      symbol: fallback.symbol,
+      val: formatPrice(live.symbol, live.price),
+      chg: `${up ? "+" : ""}${live.changePct.toFixed(2)}%`,
+      up,
+    };
+  });
+
   return (
     <div className="wrap">
       <section className="hero">
@@ -17,10 +42,9 @@ export default function Hero() {
             spreadsheet and a notes app that don't talk to each other.
           </p>
           <div className="hero-ctas">
-            <a href="#access" className="btn-primary">
+            <a href={PORTAL_LOGIN_URL} className="btn-primary">
               REQUEST ACCESS <span>→</span>
             </a>
-            <a href="#solution" className="btn-secondary">HOW IT WORKS</a>
           </div>
           <div className="hero-proof">
             <div className="proof-item">
@@ -41,7 +65,9 @@ export default function Hero() {
         <div className="terminal">
           <div className="terminal-top">
             <div className="live"><span className="pulse" /> COMMAND CENTER</div>
-            <div style={{ fontSize: 9, color: "#5B6678", fontWeight: 700 }}>DEMO DATA</div>
+            <div style={{ fontSize: 9, color: "#5B6678", fontWeight: 700 }}>
+              {hasLiveData ? "LIVE" : "LOADING"}
+            </div>
           </div>
           <div className="terminal-body">
             <div className="term-wealth-label">TOTAL WEALTH</div>
@@ -51,7 +77,7 @@ export default function Hero() {
             </div>
             <div className="term-divider" />
             <div>
-              {TERM_ROWS.map((r) => (
+              {rows.map((r) => (
                 <div className="term-row" key={r.name}>
                   <span className="term-sym">{r.name}</span>
                   <span className="term-price">{r.val}</span>

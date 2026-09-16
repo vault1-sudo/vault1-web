@@ -7,9 +7,7 @@ export default function Header() {
   return (
     <header>
       <div className="brand">
-        <div className="brand-icon">
-          <Logo size={22} />
-        </div>
+        <Logo size={46} />
         <div className="brand-copy">
           <div className="brand-name">VAULT1</div>
           <div className="brand-sub">WEALTH OS</div>
@@ -42,9 +40,6 @@ export default function Header() {
       </nav>
 
       <div className="header-actions">
-        <a href="#access" className="btn-portal">
-          <span className="dot" /> ADMIN PORTAL
-        </a>
         <div className="nav-toggle" onClick={() => setNavOpen((v) => !v)}>
           <span />
         </div>

@@ -1,7 +1,5 @@
 import { useState, FormEvent } from "react";
-
-// Update this to your deployed Vault1 app's real login URL.
-const PORTAL_LOGIN_URL = "/login";
+import { PORTAL_LOGIN_URL } from "../lib/constants";
 
 const MARKETS = ["Crypto", "Forex", "Equities", "Commodities"];
 
@@ -17,8 +15,6 @@ export default function Access() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    // No backend wired up yet — this just shows the success state.
-    // Point this at your real submission endpoint when ready.
     setSubmitted(true);
   }
 
